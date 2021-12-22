@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -35,8 +36,11 @@ namespace EduAPI
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EduAPI", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EduAPI", Description = "Test how OpenAPI work and SwaggerUI", Version = "v1" });
+                var filePath = Path.GetFullPath("EduAPI.xml");
+                c.IncludeXmlComments(filePath);
             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

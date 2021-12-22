@@ -1,5 +1,4 @@
 using EduAPI.Data;
-using EduAPI.Data.DataInitialize;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,14 +16,7 @@ namespace EduAPI
     {
         public static void Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
-
-            using (var scope = host.Services.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                DataInitializer.SeedData(dbContext);
-            }
-            host.Run();
+           CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

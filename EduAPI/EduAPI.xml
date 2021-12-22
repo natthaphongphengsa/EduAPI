@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EduAPI</name>
+    </assembly>
+    <members>
+        <member name="T:EduAPI.Data.ApplicationDbContext">
+            <summary>
+            Create class and that arv from DbContext(EntityFramworkCore) 
+            to use SQLServer from Dbcontext
+            </summary>
+        </member>
+        <member name="M:EduAPI.Data.ApplicationDbContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{EduAPI.Data.ApplicationDbContext})">
+            <summary>
+            
+            </summary>
+            <param name="options"></param>
+        </member>
+    </members>
+</doc>

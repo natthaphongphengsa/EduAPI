@@ -30,7 +30,7 @@ namespace EduAPI.Controllers
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(string id)
+        public async Task<ActionResult<User>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
 
@@ -45,7 +45,7 @@ namespace EduAPI.Controllers
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(string id, User user)
+        public async Task<IActionResult> PutUser(int id, User user)
         {
             if (id != user.Id)
             {
@@ -79,28 +79,14 @@ namespace EduAPI.Controllers
         public async Task<ActionResult<User>> PostUser(User user)
         {
             _context.Users.Add(user);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (UserExists(user.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(string id)
+        public async Task<IActionResult> DeleteUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)
@@ -114,7 +100,7 @@ namespace EduAPI.Controllers
             return NoContent();
         }
 
-        private bool UserExists(string id)
+        private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.Id == id);
         }
