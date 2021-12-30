@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EduAPI.Data;
 using EduAPI.Data.Models;
+using EduAPI.Dtos;
 
 namespace EduAPI.Controllers
 {
@@ -26,9 +27,20 @@ namespace EduAPI.Controllers
         /// <returns>return a list of courses</returns>
         // GET: api/Courses
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
+        public async Task<ActionResult<IEnumerable<CourseDto>>> GetCourses()
         {
-            return await _context.Courses.ToListAsync();
+            List<CourseDto> courseList = new List<CourseDto>();
+            foreach (var course in await _context.Courses.ToListAsync())
+            {
+                courseList.Add(new CourseDto
+                {
+                    CourseCode = course.CourseCode,
+                    Name = course.Name,
+                    StartDate = course.StartDate,
+                    EndDate = course.EndDate
+                });
+            }
+            return courseList;
         }
         /// <summary>
         /// Get course by id
@@ -37,7 +49,7 @@ namespace EduAPI.Controllers
         /// <returns>Return course object</returns>
         // GET: api/Courses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Course>> GetCourse(int id)
+        public async Task<ActionResult<CourseDto>> GetCourse(int id)
         {
             var course = await _context.Courses.FindAsync(id);
 
@@ -46,7 +58,13 @@ namespace EduAPI.Controllers
                 return NotFound();
             }
 
-            return course;
+            return new CourseDto
+            {
+                Name = course.Name,
+                CourseCode = course.CourseCode,
+                StartDate = course.StartDate,
+                EndDate = course.EndDate
+            };
         }
         /// <summary>
         /// Update course by Id
@@ -57,14 +75,22 @@ namespace EduAPI.Controllers
         // PUT: api/Courses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCourse(int id, Course course)
+        public async Task<IActionResult> PutCourse(int id, CourseDto course)
         {
-            if (id != course.Id)
-            {
-                return BadRequest();
-            }
+            //if (id != course.Id)
+            //{
+            //    return BadRequest();
+            //}
 
-            _context.Entry(course).State = EntityState.Modified;
+            _context.Entry(
+                new Course
+                {
+                    Id = id,
+                    CourseCode = course.CourseCode,
+                    Name = course.Name,
+                    StartDate = course.StartDate,
+                    EndDate = course.EndDate
+                }).State = EntityState.Modified;
 
             try
             {
@@ -92,12 +118,19 @@ namespace EduAPI.Controllers
         // POST: api/Courses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Course>> PostCourse(Course course)
+        public async Task<ActionResult<CourseDto>> PostCourse(CourseDto course)
         {
-            _context.Courses.Add(course);
+            Course newCourse = new Course()
+            {
+                CourseCode = course.CourseCode,
+                Name = course.Name,
+                StartDate = course.StartDate,
+                EndDate = course.EndDate
+            };
+            _context.Courses.Add(newCourse);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCourse", new { id = course.Id }, course);
+            return CreatedAtAction("GetCourse", new { id = newCourse.Id }, newCourse);
         }
         /// <summary>
         /// Delete course by id

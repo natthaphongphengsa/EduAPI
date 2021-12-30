@@ -36,13 +36,6 @@
             <param name="courseMembership">courseMembership object.</param>
             <returns>return nothing.</returns>
         </member>
-        <member name="M:EduAPI.Controllers.CourseMembershipsController.PostCourseMembership(EduAPI.Data.Models.CourseMembership)">
-            <summary>
-            Create CourseMembership.
-            </summary>
-            <param name="courseMembership">CourseMembership object.</param>
-            <returns></returns>
-        </member>
         <member name="M:EduAPI.Controllers.CourseMembershipsController.DeleteCourseMembership(System.Int32)">
             <summary>
             Delete CouseMembership by find the Id
@@ -71,7 +64,7 @@
             <param name="id">course identity</param>
             <returns>Return course object</returns>
         </member>
-        <member name="M:EduAPI.Controllers.CoursesController.PutCourse(System.Int32,EduAPI.Data.Models.Course)">
+        <member name="M:EduAPI.Controllers.CoursesController.PutCourse(System.Int32,EduAPI.Dtos.CourseDto)">
             <summary>
             Update course by Id
             </summary>
@@ -79,7 +72,7 @@
             <param name="course">Course object</param>
             <returns>Return nothing if exist else return BadRequest</returns>
         </member>
-        <member name="M:EduAPI.Controllers.CoursesController.PostCourse(EduAPI.Data.Models.Course)">
+        <member name="M:EduAPI.Controllers.CoursesController.PostCourse(EduAPI.Dtos.CourseDto)">
             <summary>
             Create course
             </summary>
@@ -113,12 +106,12 @@
             <param name="id">User identity</param>
             <returns>Return User information if exist else Return NotFound</returns>
         </member>
-        <member name="M:EduAPI.Controllers.UsersController.PutUser(System.Int32,EduAPI.Data.Models.User)">
+        <member name="M:EduAPI.Controllers.UsersController.PutUser(System.Int32,EduAPI.Dtos.UserDto)">
             <summary>
             Update user by Id
             </summary>
             <param name="id">User Identity</param>
-            <param name="user">User object</param>
+            <param name="userDtoModel">User object</param>
             <returns>Return Nothing if User exist else return BadRequest if user did not exist</returns>
         </member>
         <member name="M:EduAPI.Controllers.UsersController.PostUser(EduAPI.Dtos.UserDto)">

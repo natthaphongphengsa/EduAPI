@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EduAPI.Data;
 using EduAPI.Data.Models;
+using EduAPI.Dtos;
 
 namespace EduAPI.Controllers
 {
@@ -25,9 +26,19 @@ namespace EduAPI.Controllers
         /// <returns>return a list of all user</returns>
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            List<UserDto> userList = new List<UserDto>();
+            foreach (var user in await _context.Users.ToListAsync())
+            {
+                userList.Add(new UserDto
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email
+                });
+            }
+            return userList;
         }
         /// <summary>
         /// Find user by Id 
@@ -36,34 +47,46 @@ namespace EduAPI.Controllers
         /// <returns>Return User information if exist else Return NotFound</returns>
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<UserDto>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
-
+            UserDto userDto = new UserDto()
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email
+            };
             if (user == null)
             {
                 return NotFound();
             }
 
-            return user;
+            return userDto;
         }
         /// <summary>
         /// Update user by Id
         /// </summary>
         /// <param name="id">User Identity</param>
-        /// <param name="user">User object</param>
+        /// <param name="userDtoModel">User object</param>
         /// <returns>Return Nothing if User exist else return BadRequest if user did not exist</returns>
         // PUT: api/Users/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> PutUser(int id, UserDto userDtoModel)
         {
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
+            //var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            //if (user == null)
+            //{
+            //    return BadRequest();
+            //}
 
-            _context.Entry(user).State = EntityState.Modified;
-
+            _context.Entry(
+                new User
+                {
+                    Id = id,
+                    FirstName = userDtoModel.FirstName,
+                    LastName = userDtoModel.LastName,
+                    Email = userDtoModel.Email
+                }).State = EntityState.Modified;
             try
             {
                 await _context.SaveChangesAsync();
@@ -86,21 +109,22 @@ namespace EduAPI.Controllers
         /// <summary>
         /// create user
         /// </summary>
-        /// <param name="user">User object</param>
+        /// <param name="userDtoModel">User object</param>
         /// <returns>Return user that's has been create or return BadRequest if something is wrong
         /// Else return Not Acceptable</returns>
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<UserDto>> PostUser(UserDto userDtoModel)
         {
-            if (!_context.Users.Any(u => u.Email == user.Email))
+            User userModel = new User() { FirstName = userDtoModel.FirstName, LastName = userDtoModel.LastName, Email = userDtoModel.Email };
+            if (!_context.Users.Any(u => u.Email == userModel.Email))
             {
                 try
                 {
-                    _context.Users.Add(user);
+                    _context.Users.Add(userModel);
                     await _context.SaveChangesAsync();
-                    return CreatedAtAction("GetUser", new { id = user.Id }, user);
+                    return CreatedAtAction("GetUser", new { id = userModel.Id }, userModel);
                 }
                 catch (Exception e)
                 {
