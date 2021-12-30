@@ -4,22 +4,20 @@
         <name>EduAPI</name>
     </assembly>
     <members>
-        <member name="T:EduAPI.Controllers.CourseMembershipsController">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:EduAPI.Controllers.CourseMembershipsController.#ctor(EduAPI.Data.ApplicationDbContext)">
-            <summary>
-            Access to database by ApplicationDbcontext 
-            </summary>
-            <param name="context">Database access variabel</param>
-        </member>
         <member name="M:EduAPI.Controllers.CourseMembershipsController.GetCourseMemberships">
             <summary>
             Get all courseMemberships.
             </summary>
             <returns>return a list of CourseMemberships.</returns>
+        </member>
+        <member name="M:EduAPI.Controllers.CourseMembershipsController.PostCourseMembership(System.String,System.String,System.DateTime)">
+            <summary>
+            Create coursemembership
+            </summary>
+            <param name="userEmail">User email-address</param>
+            <param name="courseCode">Course code</param>
+            <param name="endRolledDate">EndRolled Date</param>
+            <returns></returns>
         </member>
         <member name="M:EduAPI.Controllers.CourseMembershipsController.GetCourseMembership(System.Int32)">
             <summary>
@@ -28,13 +26,15 @@
             <param name="id">courseMembership identity Id.</param>
             <returns>Return one CourseMembership.</returns>
         </member>
-        <member name="M:EduAPI.Controllers.CourseMembershipsController.PutCourseMembership(System.Int32,EduAPI.Data.Models.CourseMembership)">
+        <member name="M:EduAPI.Controllers.CourseMembershipsController.PutCourseMembership(System.Int32,System.String,System.String,System.DateTime)">
             <summary>
             Update CourseMembership by find the Id.
             </summary>
-            <param name="id">Identity for CourseMembership.</param>
-            <param name="courseMembership">courseMembership object.</param>
-            <returns>return nothing.</returns>
+            <param name="id"></param>
+            <param name="userEmail"></param>
+            <param name="courseCode"></param>
+            <param name="endRolledDate"></param>
+            <returns></returns>
         </member>
         <member name="M:EduAPI.Controllers.CourseMembershipsController.DeleteCourseMembership(System.Int32)">
             <summary>
@@ -112,14 +112,14 @@
             </summary>
             <param name="id">User Identity</param>
             <param name="userDtoModel">User object</param>
-            <returns>Return Nothing if User exist else return BadRequest if user did not exist</returns>
+            <returns>Return response 200 if</returns>
         </member>
         <member name="M:EduAPI.Controllers.UsersController.PostUser(EduAPI.Dtos.UserDto)">
             <summary>
             create user
             </summary>
             <param name="userDtoModel">User object</param>
-            <returns>Return user that's has been create or return BadRequest if something is wrong
+            <returns>Return user object that's has been create or return BadRequest if something is wrong
             Else return Not Acceptable</returns>
         </member>
         <member name="M:EduAPI.Controllers.UsersController.DeleteUser(System.Int32)">
@@ -128,7 +128,7 @@
             else return NotFound
             </summary>
             <param name="id">User identity</param>
-            <returns>Return nothing</returns>
+            <returns>Return StatusCode successfully delete user</returns>
         </member>
         <member name="T:EduAPI.Data.ApplicationDbContext">
             <summary>

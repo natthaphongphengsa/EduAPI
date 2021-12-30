@@ -11,7 +11,7 @@ using EduAPI.Dtos;
 
 namespace EduAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
     public class CoursesController : ControllerBase
     {
@@ -27,6 +27,7 @@ namespace EduAPI.Controllers
         /// <returns>return a list of courses</returns>
         // GET: api/Courses
         [HttpGet]
+        [Route("GetCourses")]
         public async Task<ActionResult<IEnumerable<CourseDto>>> GetCourses()
         {
             List<CourseDto> courseList = new List<CourseDto>();
@@ -48,7 +49,8 @@ namespace EduAPI.Controllers
         /// <param name="id">course identity</param>
         /// <returns>Return course object</returns>
         // GET: api/Courses/5
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("GetCourse/{id}")]
         public async Task<ActionResult<CourseDto>> GetCourse(int id)
         {
             var course = await _context.Courses.FindAsync(id);
@@ -74,7 +76,8 @@ namespace EduAPI.Controllers
         /// <returns>Return nothing if exist else return BadRequest</returns>
         // PUT: api/Courses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut]
+        [Route("UpdateCourse/{id}")]
         public async Task<IActionResult> PutCourse(int id, CourseDto course)
         {
             //if (id != course.Id)
@@ -118,6 +121,7 @@ namespace EduAPI.Controllers
         // POST: api/Courses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Route("CreateCourse")]
         public async Task<ActionResult<CourseDto>> PostCourse(CourseDto course)
         {
             Course newCourse = new Course()
@@ -138,7 +142,8 @@ namespace EduAPI.Controllers
         /// <param name="id">Course identity</param>
         /// <returns>Return nothing or return Notfound if course is not exist</returns>
         // DELETE: api/Courses/5
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("DeleteCourse/{id}")]
         public async Task<IActionResult> DeleteCourse(int id)
         {
             var course = await _context.Courses.FindAsync(id);

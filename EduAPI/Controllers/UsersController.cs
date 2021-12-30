@@ -11,7 +11,7 @@ using EduAPI.Dtos;
 
 namespace EduAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -26,6 +26,7 @@ namespace EduAPI.Controllers
         /// <returns>return a list of all user</returns>
         // GET: api/Users
         [HttpGet]
+        [Route("GetUsers")]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
             List<UserDto> userList = new List<UserDto>();
@@ -46,39 +47,35 @@ namespace EduAPI.Controllers
         /// <param name="id">User identity</param>
         /// <returns>Return User information if exist else Return NotFound</returns>
         // GET: api/Users/5
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("GetUser/{id}")]
         public async Task<ActionResult<UserDto>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
-            UserDto userDto = new UserDto()
+            if (user != null)
             {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email
-            };
-            if (user == null)
-            {
-                return NotFound();
+                UserDto userDto = new UserDto()
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email
+                };
+                return userDto;
             }
-
-            return userDto;
+            else
+                return NotFound();
         }
         /// <summary>
         /// Update user by Id
         /// </summary>
         /// <param name="id">User Identity</param>
         /// <param name="userDtoModel">User object</param>
-        /// <returns>Return Nothing if User exist else return BadRequest if user did not exist</returns>
+        /// <returns>Return response 200 if</returns>
         // PUT: api/Users/5
-        [HttpPut("{id}")]
+        [HttpPut]
+        [Route("UpdateUser/{id}")]
         public async Task<IActionResult> PutUser(int id, UserDto userDtoModel)
         {
-            //var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-            //if (user == null)
-            //{
-            //    return BadRequest();
-            //}
-
             _context.Entry(
                 new User
                 {
@@ -87,6 +84,7 @@ namespace EduAPI.Controllers
                     LastName = userDtoModel.LastName,
                     Email = userDtoModel.Email
                 }).State = EntityState.Modified;
+
             try
             {
                 await _context.SaveChangesAsync();
@@ -102,19 +100,19 @@ namespace EduAPI.Controllers
                     throw;
                 }
             }
-
-            return NoContent();
+            return StatusCode(200, "Successfully update user");
         }
 
         /// <summary>
         /// create user
         /// </summary>
         /// <param name="userDtoModel">User object</param>
-        /// <returns>Return user that's has been create or return BadRequest if something is wrong
+        /// <returns>Return user object that's has been create or return BadRequest if something is wrong
         /// Else return Not Acceptable</returns>
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Route("CreateUser")]
         public async Task<ActionResult<UserDto>> PostUser(UserDto userDtoModel)
         {
             User userModel = new User() { FirstName = userDtoModel.FirstName, LastName = userDtoModel.LastName, Email = userDtoModel.Email };
@@ -142,9 +140,10 @@ namespace EduAPI.Controllers
         /// else return NotFound
         /// </summary>
         /// <param name="id">User identity</param>
-        /// <returns>Return nothing</returns>
+        /// <returns>Return StatusCode successfully delete user</returns>
         // DELETE: api/Users/5
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("DeleteUser/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
@@ -163,7 +162,7 @@ namespace EduAPI.Controllers
                 return StatusCode(400, e.Message);
             }
 
-            return NoContent();
+            return StatusCode(200, "Successfully delete user");
         }
 
         private bool UserExists(int id)
