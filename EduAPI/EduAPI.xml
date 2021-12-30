@@ -4,6 +4,139 @@
         <name>EduAPI</name>
     </assembly>
     <members>
+        <member name="T:EduAPI.Controllers.CourseMembershipsController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:EduAPI.Controllers.CourseMembershipsController.#ctor(EduAPI.Data.ApplicationDbContext)">
+            <summary>
+            Access to database by ApplicationDbcontext 
+            </summary>
+            <param name="context">Database access variabel</param>
+        </member>
+        <member name="M:EduAPI.Controllers.CourseMembershipsController.GetCourseMemberships">
+            <summary>
+            Get all courseMemberships.
+            </summary>
+            <returns>return a list of CourseMemberships.</returns>
+        </member>
+        <member name="M:EduAPI.Controllers.CourseMembershipsController.GetCourseMembership(System.Int32)">
+            <summary>
+            Get one courseMemnerships by Id.
+            </summary>
+            <param name="id">courseMembership identity Id.</param>
+            <returns>Return one CourseMembership.</returns>
+        </member>
+        <member name="M:EduAPI.Controllers.CourseMembershipsController.PutCourseMembership(System.Int32,EduAPI.Data.Models.CourseMembership)">
+            <summary>
+            Update CourseMembership by find the Id.
+            </summary>
+            <param name="id">Identity for CourseMembership.</param>
+            <param name="courseMembership">courseMembership object.</param>
+            <returns>return nothing.</returns>
+        </member>
+        <member name="M:EduAPI.Controllers.CourseMembershipsController.PostCourseMembership(EduAPI.Data.Models.CourseMembership)">
+            <summary>
+            Create CourseMembership.
+            </summary>
+            <param name="courseMembership">CourseMembership object.</param>
+            <returns></returns>
+        </member>
+        <member name="M:EduAPI.Controllers.CourseMembershipsController.DeleteCourseMembership(System.Int32)">
+            <summary>
+            Delete CouseMembership by find the Id
+            </summary>
+            <param name="id">Identity for CourseMembership</param>
+            <returns>return nothing</returns>
+        </member>
+        <member name="M:EduAPI.Controllers.CourseMembershipsController.CourseMembershipExists(System.Int32)">
+            <summary>
+            Check CouseMembership by Id, if it's exist
+            then return true or false
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EduAPI.Controllers.CoursesController.GetCourses">
+            <summary>
+            Get all courses
+            </summary>
+            <returns>return a list of courses</returns>
+        </member>
+        <member name="M:EduAPI.Controllers.CoursesController.GetCourse(System.Int32)">
+            <summary>
+            Get course by id
+            </summary>
+            <param name="id">course identity</param>
+            <returns>Return course object</returns>
+        </member>
+        <member name="M:EduAPI.Controllers.CoursesController.PutCourse(System.Int32,EduAPI.Data.Models.Course)">
+            <summary>
+            Update course by Id
+            </summary>
+            <param name="id">Course Identity</param>
+            <param name="course">Course object</param>
+            <returns>Return nothing if exist else return BadRequest</returns>
+        </member>
+        <member name="M:EduAPI.Controllers.CoursesController.PostCourse(EduAPI.Data.Models.Course)">
+            <summary>
+            Create course
+            </summary>
+            <param name="course">Course object</param>
+            <returns>Return course object that's has been created</returns>
+        </member>
+        <member name="M:EduAPI.Controllers.CoursesController.DeleteCourse(System.Int32)">
+            <summary>
+            Delete course by id
+            </summary>
+            <param name="id">Course identity</param>
+            <returns>Return nothing or return Notfound if course is not exist</returns>
+        </member>
+        <member name="M:EduAPI.Controllers.CoursesController.CourseExists(System.Int32)">
+            <summary>
+            check if course is exist by id
+            </summary>
+            <param name="id">course Identity</param>
+            <returns>Return true or false if course exist or not</returns>
+        </member>
+        <member name="M:EduAPI.Controllers.UsersController.GetUsers">
+            <summary>
+            Get all user from database
+            </summary>
+            <returns>return a list of all user</returns>
+        </member>
+        <member name="M:EduAPI.Controllers.UsersController.GetUser(System.Int32)">
+            <summary>
+            Find user by Id 
+            </summary>
+            <param name="id">User identity</param>
+            <returns>Return User information if exist else Return NotFound</returns>
+        </member>
+        <member name="M:EduAPI.Controllers.UsersController.PutUser(System.Int32,EduAPI.Data.Models.User)">
+            <summary>
+            Update user by Id
+            </summary>
+            <param name="id">User Identity</param>
+            <param name="user">User object</param>
+            <returns>Return Nothing if User exist else return BadRequest if user did not exist</returns>
+        </member>
+        <member name="M:EduAPI.Controllers.UsersController.PostUser(EduAPI.Dtos.UserDto)">
+            <summary>
+            create user
+            </summary>
+            <param name="userDtoModel">User object</param>
+            <returns>Return user that's has been create or return BadRequest if something is wrong
+            Else return Not Acceptable</returns>
+        </member>
+        <member name="M:EduAPI.Controllers.UsersController.DeleteUser(System.Int32)">
+            <summary>
+            find User by id and delete user if exist 
+            else return NotFound
+            </summary>
+            <param name="id">User identity</param>
+            <returns>Return nothing</returns>
+        </member>
         <member name="T:EduAPI.Data.ApplicationDbContext">
             <summary>
             Create class and that arv from DbContext(EntityFramworkCore) 
