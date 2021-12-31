@@ -1,0 +1,718 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "EduAPI",
+    "description": "Test how OpenAPI work and SwaggerUI",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/GetCourseMemberships": {
+      "get": {
+        "tags": [
+          "CourseMemberships"
+        ],
+        "summary": "Get all courseMemberships.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CourseMembershipDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CourseMembershipDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CourseMembershipDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/CreateCourseMembership": {
+      "post": {
+        "tags": [
+          "CourseMemberships"
+        ],
+        "summary": "Create coursemembership",
+        "parameters": [
+          {
+            "name": "userEmail",
+            "in": "query",
+            "description": "User email-address",
+            "schema": {
+              "type": "string",
+              "description": "User email-address",
+              "nullable": true
+            }
+          },
+          {
+            "name": "courseCode",
+            "in": "query",
+            "description": "Course code",
+            "schema": {
+              "type": "string",
+              "description": "Course code",
+              "nullable": true
+            }
+          },
+          {
+            "name": "endRolledDate",
+            "in": "query",
+            "description": "EndRolled Date",
+            "schema": {
+              "type": "string",
+              "description": "EndRolled Date",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseMembershipDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseMembershipDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseMembershipDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/GetCourseMembership/{id}": {
+      "get": {
+        "tags": [
+          "CourseMemberships"
+        ],
+        "summary": "Get one courseMemnerships by Id.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "courseMembership identity Id.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "courseMembership identity Id.",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseMembershipDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseMembershipDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseMembershipDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/UpdateCourseMembership/{id}": {
+      "put": {
+        "tags": [
+          "CourseMemberships"
+        ],
+        "summary": "Update CourseMembership by find the Id.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "userEmail",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "string",
+              "description": "",
+              "nullable": true
+            }
+          },
+          {
+            "name": "courseCode",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "string",
+              "description": "",
+              "nullable": true
+            }
+          },
+          {
+            "name": "endRolledDate",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "string",
+              "description": "",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/DeleteCourseMembership/{id}": {
+      "delete": {
+        "tags": [
+          "CourseMemberships"
+        ],
+        "summary": "Delete CouseMembership by find the Id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identity for CourseMembership",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "Identity for CourseMembership",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/GetCourses": {
+      "get": {
+        "tags": [
+          "Courses"
+        ],
+        "summary": "Get all courses",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CourseDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CourseDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CourseDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/GetCourse/{id}": {
+      "get": {
+        "tags": [
+          "Courses"
+        ],
+        "summary": "Get course by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "course identity",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "course identity",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/UpdateCourse/{id}": {
+      "put": {
+        "tags": [
+          "Courses"
+        ],
+        "summary": "Update course by Id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Course Identity",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "Course Identity",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Course object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CourseDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CourseDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CourseDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/CreateCourse": {
+      "post": {
+        "tags": [
+          "Courses"
+        ],
+        "summary": "Create course",
+        "requestBody": {
+          "description": "Course object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CourseDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CourseDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CourseDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/DeleteCourse/{id}": {
+      "delete": {
+        "tags": [
+          "Courses"
+        ],
+        "summary": "Delete course by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Course identity",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "Course identity",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/GetUsers": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get all user from database",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/GetUser/{id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Find user by Id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User identity",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "User identity",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/UpdateUser/{id}": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update user by Id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User Identity",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "User Identity",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "User object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/CreateUser": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "create user",
+        "requestBody": {
+          "description": "User object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/DeleteUser/{id}": {
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "find User by id and delete user if exist \r\nelse return NotFound",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User identity",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "User identity",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserDto": {
+        "required": [
+          "email",
+          "firstName",
+          "lastName"
+        ],
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "format": "string"
+          },
+          "lastName": {
+            "type": "string",
+            "format": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CourseDto": {
+        "required": [
+          "courseCode",
+          "endDate",
+          "name",
+          "startDate"
+        ],
+        "type": "object",
+        "properties": {
+          "courseCode": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CourseMembershipDto": {
+        "required": [
+          "course",
+          "endrolledDate",
+          "user"
+        ],
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/UserDto"
+          },
+          "course": {
+            "$ref": "#/components/schemas/CourseDto"
+          },
+          "endrolledDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

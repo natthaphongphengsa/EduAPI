@@ -15,6 +15,7 @@ namespace EduAPI.Data.Models
         [Required]
         public string LastName { get; set; }
         [Required]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
     }
 }

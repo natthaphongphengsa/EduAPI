@@ -64,15 +64,15 @@
             <param name="id">course identity</param>
             <returns>Return course object</returns>
         </member>
-        <member name="M:EduAPI.Controllers.CoursesController.PutCourse(System.Int32,EduAPI.Dtos.CourseDto)">
+        <member name="M:EduAPI.Controllers.CoursesController.PutCourse(System.Int32,EduAPI.Data.Models.Course)">
             <summary>
             Update course by Id
             </summary>
             <param name="id">Course Identity</param>
             <param name="course">Course object</param>
-            <returns>Return nothing if exist else return BadRequest</returns>
+            <returns>Return StatusCode 200 Successfully update course!</returns>
         </member>
-        <member name="M:EduAPI.Controllers.CoursesController.PostCourse(EduAPI.Dtos.CourseDto)">
+        <member name="M:EduAPI.Controllers.CoursesController.PostCourse(EduAPI.Data.Models.Course)">
             <summary>
             Create course
             </summary>
@@ -106,21 +106,20 @@
             <param name="id">User identity</param>
             <returns>Return User information if exist else Return NotFound</returns>
         </member>
-        <member name="M:EduAPI.Controllers.UsersController.PutUser(System.Int32,EduAPI.Dtos.UserDto)">
+        <member name="M:EduAPI.Controllers.UsersController.PutUser(System.Int32,EduAPI.Data.Models.User)">
             <summary>
             Update user by Id
             </summary>
             <param name="id">User Identity</param>
-            <param name="userDtoModel">User object</param>
+            <param name="user">User object</param>
             <returns>Return response 200 if</returns>
         </member>
-        <member name="M:EduAPI.Controllers.UsersController.PostUser(EduAPI.Dtos.UserDto)">
+        <member name="M:EduAPI.Controllers.UsersController.PostUser(EduAPI.Data.Models.User)">
             <summary>
             create user
             </summary>
-            <param name="userDtoModel">User object</param>
-            <returns>Return user object that's has been create or return BadRequest if something is wrong
-            Else return Not Acceptable</returns>
+            <param name="user">User firstname</param>
+            <returns>Return statusCode 200 successfully created user</returns>
         </member>
         <member name="M:EduAPI.Controllers.UsersController.DeleteUser(System.Int32)">
             <summary>

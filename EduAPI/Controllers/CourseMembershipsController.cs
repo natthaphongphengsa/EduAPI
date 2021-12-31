@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EduAPI.Data;
 using EduAPI.Data.Models;
-using EduAPI.Dtos;
+
 namespace EduAPI.Controllers
 {
     [Route("api/")]
@@ -27,30 +27,9 @@ namespace EduAPI.Controllers
         // GET: api/CourseMemberships
         [HttpGet]
         [Route("GetCourseMemberships")]
-        public async Task<ActionResult<IEnumerable<CourseMembershipDto>>> GetCourseMemberships()
+        public async Task<ActionResult<IEnumerable<CourseMembership>>> GetCourseMemberships()
         {
-            List<CourseMembershipDto> CourseMembershipList = new List<CourseMembershipDto>();
-            foreach (var courseMembership in await _context.CourseMemberships.Include(c => c.Course).Include(u => u.User).ToListAsync())
-            {
-                CourseMembershipList.Add(new CourseMembershipDto
-                {
-                    Course = new CourseDto
-                    {
-                        CourseCode = courseMembership.Course.CourseCode,
-                        Name = courseMembership.Course.Name,
-                        StartDate = courseMembership.Course.StartDate,
-                        EndDate = courseMembership.Course.EndDate
-                    },
-                    User = new UserDto
-                    {
-                        FirstName = courseMembership.User.FirstName,
-                        LastName = courseMembership.User.LastName,
-                        Email = courseMembership.User.Email
-                    },
-                    EndrolledDate = courseMembership.EndrolledDate,
-                });
-            }
-            return CourseMembershipList;
+            return await _context.CourseMemberships.Include(c => c.Course).Include(u => u.User).ToListAsync();
         }
         /// <summary>
         /// Create coursemembership
@@ -62,24 +41,30 @@ namespace EduAPI.Controllers
         // POST: api/CourseMemberships
         [HttpPost]
         [Route("CreateCourseMembership")]
-        public async Task<ActionResult<CourseMembershipDto>> PostCourseMembership(string userEmail, string courseCode, DateTime endRolledDate)
+        public async Task<ActionResult<CourseMembership>> PostCourseMembership(string userEmail, string courseCode, DateTime endRolledDate)
         {
+
             Course course = await _context.Courses.FirstOrDefaultAsync(c => c.CourseCode == courseCode);
             User user = await _context.Users.FirstOrDefaultAsync(c => c.Email == userEmail);
-
-            CourseMembership courseMembership = new CourseMembership()
+            if (course != null && user != null && endRolledDate != DateTime.MinValue)
             {
-                Course = course,
-                User = user,
-                EndrolledDate = endRolledDate
-            };
+                CourseMembership courseMembership = new CourseMembership()
+                {
+                    Course = course,
+                    User = user,
+                    EndrolledDate = endRolledDate
+                };
 
-            await _context.CourseMemberships.AddAsync(courseMembership);
-            await _context.SaveChangesAsync();
+                await _context.CourseMemberships.AddAsync(courseMembership);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCourseMembership", new { id = courseMembership.Id }, courseMembership);
+                return CreatedAtAction("GetCourseMembership", new { id = courseMembership.Id }, courseMembership);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
-
 
         /// <summary>
         /// Get one courseMemnerships by Id.
@@ -89,7 +74,7 @@ namespace EduAPI.Controllers
         // GET: api/CourseMemberships/5
         [HttpGet]
         [Route("GetCourseMembership/{id}")]
-        public async Task<ActionResult<CourseMembershipDto>> GetCourseMembership(int id)
+        public async Task<ActionResult<CourseMembership>> GetCourseMembership(int id)
         {
             var courseMembership = await _context.CourseMemberships.Include(c => c.Course).Include(u => u.User).FirstOrDefaultAsync(c => c.Id == id);
 
@@ -97,26 +82,7 @@ namespace EduAPI.Controllers
             {
                 return NotFound();
             }
-
-            CourseMembershipDto courseMembershipDto = new CourseMembershipDto()
-            {
-                Course = new CourseDto
-                {
-                    CourseCode = courseMembership.Course.CourseCode,
-                    Name = courseMembership.Course.Name,
-                    StartDate = courseMembership.Course.StartDate,
-                    EndDate = courseMembership.Course.EndDate
-                },
-                User = new UserDto
-                {
-                    FirstName = courseMembership.User.FirstName,
-                    LastName = courseMembership.User.LastName,
-                    Email = courseMembership.User.Email
-                },
-                EndrolledDate = courseMembership.EndrolledDate
-            };
-
-            return courseMembershipDto;
+            return courseMembership;
         }
         /// <summary>
         /// Update CourseMembership by find the Id.

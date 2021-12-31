@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EduAPI.Data;
 using EduAPI.Data.Models;
-using EduAPI.Dtos;
 
 namespace EduAPI.Controllers
 {
@@ -28,20 +27,9 @@ namespace EduAPI.Controllers
         // GET: api/Courses
         [HttpGet]
         [Route("GetCourses")]
-        public async Task<ActionResult<IEnumerable<CourseDto>>> GetCourses()
+        public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
         {
-            List<CourseDto> courseList = new List<CourseDto>();
-            foreach (var course in await _context.Courses.ToListAsync())
-            {
-                courseList.Add(new CourseDto
-                {
-                    CourseCode = course.CourseCode,
-                    Name = course.Name,
-                    StartDate = course.StartDate,
-                    EndDate = course.EndDate
-                });
-            }
-            return courseList;
+            return await _context.Courses.ToListAsync();
         }
         /// <summary>
         /// Get course by id
@@ -51,7 +39,7 @@ namespace EduAPI.Controllers
         // GET: api/Courses/5
         [HttpGet]
         [Route("GetCourse/{id}")]
-        public async Task<ActionResult<CourseDto>> GetCourse(int id)
+        public async Task<ActionResult<Course>> GetCourse(int id)
         {
             var course = await _context.Courses.FindAsync(id);
 
@@ -60,41 +48,26 @@ namespace EduAPI.Controllers
                 return NotFound();
             }
 
-            return new CourseDto
-            {
-                Name = course.Name,
-                CourseCode = course.CourseCode,
-                StartDate = course.StartDate,
-                EndDate = course.EndDate
-            };
+            return course;
         }
         /// <summary>
         /// Update course by Id
         /// </summary>
         /// <param name="id">Course Identity</param>
         /// <param name="course">Course object</param>
-        /// <returns>Return nothing if exist else return BadRequest</returns>
+        /// <returns>Return StatusCode 200 Successfully update course!</returns>
         // PUT: api/Courses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
         [Route("UpdateCourse/{id}")]
-        public async Task<IActionResult> PutCourse(int id, CourseDto course)
+        public async Task<IActionResult> PutCourse(int id, Course course)
         {
-            //if (id != course.Id)
-            //{
-            //    return BadRequest();
-            //}
+            if (id != course.Id)
+            {
+                return BadRequest();
+            }
 
-            _context.Entry(
-                new Course
-                {
-                    Id = id,
-                    CourseCode = course.CourseCode,
-                    Name = course.Name,
-                    StartDate = course.StartDate,
-                    EndDate = course.EndDate
-                }).State = EntityState.Modified;
-
+            _context.Entry(course).State = EntityState.Modified;
             try
             {
                 await _context.SaveChangesAsync();
@@ -111,7 +84,7 @@ namespace EduAPI.Controllers
                 }
             }
 
-            return NoContent();
+            return StatusCode(200, "Successfully update course!");
         }
         /// <summary>
         /// Create course
@@ -122,19 +95,19 @@ namespace EduAPI.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Route("CreateCourse")]
-        public async Task<ActionResult<CourseDto>> PostCourse(CourseDto course)
+        public async Task<ActionResult<Course>> PostCourse(Course course)
         {
-            Course newCourse = new Course()
+            if (!await _context.Courses.AnyAsync(c => c.CourseCode == course.CourseCode))
             {
-                CourseCode = course.CourseCode,
-                Name = course.Name,
-                StartDate = course.StartDate,
-                EndDate = course.EndDate
-            };
-            _context.Courses.Add(newCourse);
-            await _context.SaveChangesAsync();
+                _context.Courses.Add(course);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCourse", new { id = newCourse.Id }, newCourse);
+                return CreatedAtAction("GetCourse", new { id = course.Id }, course);
+            }
+            else
+            {
+                return StatusCode(406, $"This {course.CourseCode} course is already exist");
+            }
         }
         /// <summary>
         /// Delete course by id
@@ -155,7 +128,7 @@ namespace EduAPI.Controllers
             _context.Courses.Remove(course);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return StatusCode(200, "Successfully delete course");
         }
         /// <summary>
         /// check if course is exist by id

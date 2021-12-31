@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EduAPI.Data;
 using EduAPI.Data.Models;
-using EduAPI.Dtos;
 
 namespace EduAPI.Controllers
 {
@@ -27,19 +26,9 @@ namespace EduAPI.Controllers
         // GET: api/Users
         [HttpGet]
         [Route("GetUsers")]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            List<UserDto> userList = new List<UserDto>();
-            foreach (var user in await _context.Users.ToListAsync())
-            {
-                userList.Add(new UserDto
-                {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email
-                });
-            }
-            return userList;
+            return await _context.Users.ToListAsync();
         }
         /// <summary>
         /// Find user by Id 
@@ -49,18 +38,12 @@ namespace EduAPI.Controllers
         // GET: api/Users/5
         [HttpGet]
         [Route("GetUser/{id}")]
-        public async Task<ActionResult<UserDto>> GetUser(int id)
+        public async Task<ActionResult<User>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user != null)
             {
-                UserDto userDto = new UserDto()
-                {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email
-                };
-                return userDto;
+                return user;
             }
             else
                 return NotFound();
@@ -69,21 +52,19 @@ namespace EduAPI.Controllers
         /// Update user by Id
         /// </summary>
         /// <param name="id">User Identity</param>
-        /// <param name="userDtoModel">User object</param>
+        /// <param name="user">User object</param>
         /// <returns>Return response 200 if</returns>
         // PUT: api/Users/5
         [HttpPut]
         [Route("UpdateUser/{id}")]
-        public async Task<IActionResult> PutUser(int id, UserDto userDtoModel)
+        public async Task<IActionResult> PutUser(int id, User user)
         {
-            _context.Entry(
-                new User
-                {
-                    Id = id,
-                    FirstName = userDtoModel.FirstName,
-                    LastName = userDtoModel.LastName,
-                    Email = userDtoModel.Email
-                }).State = EntityState.Modified;
+            if (id != user.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(user).State = EntityState.Modified;
 
             try
             {
@@ -106,23 +87,21 @@ namespace EduAPI.Controllers
         /// <summary>
         /// create user
         /// </summary>
-        /// <param name="userDtoModel">User object</param>
-        /// <returns>Return user object that's has been create or return BadRequest if something is wrong
-        /// Else return Not Acceptable</returns>
+        /// <param name="user">User firstname</param>
+        /// <returns>Return statusCode 200 successfully created user</returns>
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Route("CreateUser")]
-        public async Task<ActionResult<UserDto>> PostUser(UserDto userDtoModel)
+        public async Task<ActionResult<User>> PostUser(User user)
         {
-            User userModel = new User() { FirstName = userDtoModel.FirstName, LastName = userDtoModel.LastName, Email = userDtoModel.Email };
-            if (!_context.Users.Any(u => u.Email == userModel.Email))
+            if (!_context.Users.Any(u => u.Email == user.Email))
             {
                 try
                 {
-                    _context.Users.Add(userModel);
+                    _context.Users.Add(user);
                     await _context.SaveChangesAsync();
-                    return CreatedAtAction("GetUser", new { id = userModel.Id }, userModel);
+                    return StatusCode(200, "Successfully created user");
                 }
                 catch (Exception e)
                 {
