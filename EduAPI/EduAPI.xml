@@ -114,7 +114,7 @@
             <param name="user">User object</param>
             <returns>Return response 200 if</returns>
         </member>
-        <member name="M:EduAPI.Controllers.UsersController.PostUser(EduAPI.Data.Models.User)">
+        <member name="M:EduAPI.Controllers.UsersController.PostUser(EduAPI.Dtos.UserDto)">
             <summary>
             create user
             </summary>

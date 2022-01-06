@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EduAPI.Data;
 using EduAPI.Data.Models;
+using EduAPI.Dtos;
 
 namespace EduAPI.Controllers
 {
@@ -93,13 +94,13 @@ namespace EduAPI.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Route("CreateUser")]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<User>> PostUser(UserDto user)
         {
-            if (!_context.Users.Any(u => u.Email == user.Email))
+            if (!_context.Users.Any(u => (u.FirstName == user.FirstName && u.LastName == user.LastName) || (u.Email == user.Email)))
             {
                 try
                 {
-                    _context.Users.Add(user);
+                    _context.Users.Add(new User { FirstName = user.FirstName, LastName = user.LastName, Email = user.Email });
                     await _context.SaveChangesAsync();
                     return StatusCode(200, "Successfully created user");
                 }
