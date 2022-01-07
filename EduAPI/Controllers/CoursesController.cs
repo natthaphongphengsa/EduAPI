@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EduAPI.Data;
 using EduAPI.Data.Models;
+using EduAPI.Dtos;
 
 namespace EduAPI.Controllers
 {
@@ -95,14 +96,21 @@ namespace EduAPI.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Route("CreateCourse")]
-        public async Task<ActionResult<Course>> PostCourse(Course course)
+        public async Task<ActionResult<CourseDto>> PostCourse(CourseDto course)
         {
-            if (!await _context.Courses.AnyAsync(c => c.CourseCode == course.CourseCode))
+            if (!await _context.Courses.AnyAsync(c => c.Name == course.Name || c.CourseCode == course.Name))
             {
-                _context.Courses.Add(course);
+                _context.Courses.Add(
+                    new Course
+                    {
+                        CourseCode = course.CourseCode,
+                        Name = course.Name,
+                        StartDate = course.StartDate,
+                        EndDate = course.EndDate
+                    });
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetCourse", new { id = course.Id }, course);
+                return CreatedAtAction("GetCourse", new { id = _context.Courses.FirstOrDefault(u => u.CourseCode == course.CourseCode).Id }, course);
             }
             else
             {

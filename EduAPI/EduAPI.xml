@@ -72,7 +72,7 @@
             <param name="course">Course object</param>
             <returns>Return StatusCode 200 Successfully update course!</returns>
         </member>
-        <member name="M:EduAPI.Controllers.CoursesController.PostCourse(EduAPI.Data.Models.Course)">
+        <member name="M:EduAPI.Controllers.CoursesController.PostCourse(EduAPI.Dtos.CourseDto)">
             <summary>
             Create course
             </summary>
