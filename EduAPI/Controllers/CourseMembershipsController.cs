@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EduAPI.Data;
 using EduAPI.Data.Models;
+using EduAPI.Dtos;
 
 namespace EduAPI.Controllers
 {
@@ -34,25 +35,23 @@ namespace EduAPI.Controllers
         /// <summary>
         /// Create coursemembership
         /// </summary>
-        /// <param name="userEmail">User email-address</param>
-        /// <param name="courseCode">Course code</param>
-        /// <param name="endRolledDate">EndRolled Date</param>
+        /// <param name="courseMembershipDto">courseMembership object</param>
         /// <returns></returns>
         // POST: api/CourseMemberships
         [HttpPost]
         [Route("CreateCourseMembership")]
-        public async Task<ActionResult<CourseMembership>> PostCourseMembership(string userEmail, string courseCode, DateTime endRolledDate)
+        public async Task<ActionResult<CourseMembership>> PostCourseMembership(CourseMembershipDto courseMembershipDto)
         {
+            Course course = await _context.Courses.FirstOrDefaultAsync(c => c.CourseCode == courseMembershipDto.Course.CourseCode);
+            User user = await _context.Users.FirstOrDefaultAsync(c => c.Email == courseMembershipDto.User.Email);
 
-            Course course = await _context.Courses.FirstOrDefaultAsync(c => c.CourseCode == courseCode);
-            User user = await _context.Users.FirstOrDefaultAsync(c => c.Email == userEmail);
-            if (course != null && user != null && endRolledDate != DateTime.MinValue)
+            if (course != null && user != null)
             {
                 CourseMembership courseMembership = new CourseMembership()
                 {
                     Course = course,
                     User = user,
-                    EndrolledDate = endRolledDate
+                    EndrolledDate = courseMembershipDto.EndrolledDate
                 };
 
                 await _context.CourseMemberships.AddAsync(courseMembership);

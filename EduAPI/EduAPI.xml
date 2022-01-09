@@ -10,13 +10,11 @@
             </summary>
             <returns>return a list of CourseMemberships.</returns>
         </member>
-        <member name="M:EduAPI.Controllers.CourseMembershipsController.PostCourseMembership(System.String,System.String,System.DateTime)">
+        <member name="M:EduAPI.Controllers.CourseMembershipsController.PostCourseMembership(EduAPI.Dtos.CourseMembershipDto)">
             <summary>
             Create coursemembership
             </summary>
-            <param name="userEmail">User email-address</param>
-            <param name="courseCode">Course code</param>
-            <param name="endRolledDate">EndRolled Date</param>
+            <param name="courseMembershipDto">courseMembership object</param>
             <returns></returns>
         </member>
         <member name="M:EduAPI.Controllers.CourseMembershipsController.GetCourseMembership(System.Int32)">

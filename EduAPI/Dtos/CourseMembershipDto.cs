@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EduAPI.Data.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,9 +9,7 @@ namespace EduAPI.Dtos
 {
     public class CourseMembershipDto
     {
-        [Required]
         public UserDto User { get; set; }
-        [Required]
         public CourseDto Course { get; set; }
         public DateTime? EndrolledDate { get; set; }
     }
