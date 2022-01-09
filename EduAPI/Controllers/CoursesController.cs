@@ -110,7 +110,8 @@ namespace EduAPI.Controllers
                     });
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetCourse", new { id = _context.Courses.FirstOrDefault(u => u.CourseCode == course.CourseCode).Id }, course);
+                return StatusCode(200, "Successfully created course");
+                //return CreatedAtAction("GetCourse", new { id = _context.Courses.FirstOrDefault(u => u.CourseCode == course.CourseCode).Id }, course);
             }
             else
             {

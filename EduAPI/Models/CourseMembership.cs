@@ -14,7 +14,6 @@ namespace EduAPI.Data.Models
         public User User { get; set; }
         [Required]
         public Course Course { get; set; }
-        [Required]
-        public DateTime EndrolledDate { get; set; }
+        public DateTime? EndrolledDate { get; set; }
     }
 }
