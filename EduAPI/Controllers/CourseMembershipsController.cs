@@ -54,13 +54,18 @@ namespace EduAPI.Controllers
                     EndrolledDate = courseMembershipDto.EndrolledDate
                 };
 
-                if (!await _context.CourseMemberships.AnyAsync(c => c == courseMembership))
+                if (!await _context.CourseMemberships.AnyAsync(c => c.User == user && c.Course == course))
                 {
                     await _context.CourseMemberships.AddAsync(courseMembership);
                     await _context.SaveChangesAsync();
+                    return StatusCode(200, "Successfully created user");
+                }
+                else
+                {
+                    return StatusCode(406, "CourseMemberships allready exist!");
                 }
 
-                return CreatedAtAction("GetCourseMembership", new { id = courseMembership.Id }, courseMembership);
+                //return CreatedAtAction("GetCourseMembership", new { id = courseMembership.Id }, courseMembership);
             }
             else
             {
