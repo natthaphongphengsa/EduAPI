@@ -46,7 +46,7 @@ namespace EduAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: true),
                     CourseId = table.Column<int>(type: "int", nullable: true),
-                    EndrolledDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    EndrolledDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {

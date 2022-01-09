@@ -55,7 +55,7 @@ namespace EduAPI.Migrations
                     b.Property<int?>("CourseId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EndrolledDate")
+                    b.Property<DateTime?>("EndrolledDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("UserId")

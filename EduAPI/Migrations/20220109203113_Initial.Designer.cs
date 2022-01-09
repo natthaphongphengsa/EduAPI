@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EduAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220107133804_Initial")]
+    [Migration("20220109203113_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,7 +57,7 @@ namespace EduAPI.Migrations
                     b.Property<int?>("CourseId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EndrolledDate")
+                    b.Property<DateTime?>("EndrolledDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("UserId")
