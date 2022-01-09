@@ -12,7 +12,6 @@ namespace EduAPI.Dtos
         public UserDto User { get; set; }
         [Required]
         public CourseDto Course { get; set; }
-        [Required]
-        public DateTime EndrolledDate { get; set; }
+        public DateTime? EndrolledDate { get; set; }
     }
 }

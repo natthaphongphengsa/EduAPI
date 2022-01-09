@@ -10,9 +10,7 @@ namespace EduAPI.Data.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
         public User User { get; set; }
-        [Required]
         public Course Course { get; set; }
         public DateTime? EndrolledDate { get; set; }
     }
