@@ -54,8 +54,11 @@ namespace EduAPI.Controllers
                     EndrolledDate = courseMembershipDto.EndrolledDate
                 };
 
-                await _context.CourseMemberships.AddAsync(courseMembership);
-                await _context.SaveChangesAsync();
+                if (!await _context.CourseMemberships.AnyAsync(c => c == courseMembership))
+                {
+                    await _context.CourseMemberships.AddAsync(courseMembership);
+                    await _context.SaveChangesAsync();
+                }
 
                 return CreatedAtAction("GetCourseMembership", new { id = courseMembership.Id }, courseMembership);
             }
