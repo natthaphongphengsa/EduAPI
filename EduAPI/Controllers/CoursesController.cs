@@ -96,13 +96,14 @@ namespace EduAPI.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Route("CreateCourse")]
-        public async Task<ActionResult<CourseDto>> PostCourse(CourseDto course)
+        public async Task<ActionResult<Course>> PostCourse(Course course)
         {
             if (!await _context.Courses.AnyAsync(c => c.Name == course.Name || c.CourseCode == course.Name))
             {
                 _context.Courses.Add(
                     new Course
                     {
+                        Id = course.Id,
                         CourseCode = course.CourseCode,
                         Name = course.Name,
                         StartDate = course.StartDate,
