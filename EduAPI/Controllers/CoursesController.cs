@@ -28,9 +28,25 @@ namespace EduAPI.Controllers
         // GET: api/Courses
         [HttpGet]
         [Route("GetCourses")]
-        public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
+        public async Task<ActionResult<IEnumerable<CourseDto>>> GetCourses()
         {
-            return await _context.Courses.ToListAsync();
+            //List<CourseDto> courseDtos = new List<CourseDto>();
+            var courses = await _context.Courses.ToListAsync();
+
+            HashSet<CourseDto> courseDtos = new HashSet<CourseDto>();
+
+            foreach (var course in courses)
+            {
+                courseDtos.Add(new CourseDto
+                {
+                    CourseCode = course.CourseCode,
+                    Name = course.Name,
+                    StartDate = course.StartDate,
+                    EndDate = course.EndDate
+                });
+            }
+
+            return courseDtos;
         }
         /// <summary>
         /// Get course by id
@@ -98,25 +114,31 @@ namespace EduAPI.Controllers
         [Route("CreateCourse")]
         public async Task<ActionResult<Course>> PostCourse(Course course)
         {
-            if (!await _context.Courses.AnyAsync(c => c.Name == course.Name || c.CourseCode == course.Name))
+            if (!_context.Courses.Any(c => c.CourseCode == course.CourseCode || c.Name == course.Name || c.Id == course.Id))
             {
-                _context.Courses.Add(
-                    new Course
+                int newId = IdGenerator();
+                if (course.Id > 0)
+                {
+                    return await CreateCourse(course);
+                }
+                else
+                {
+                    if (!await _context.Courses.AnyAsync(u => u.Id == newId))
                     {
-                        Id = course.Id,
-                        CourseCode = course.CourseCode,
-                        Name = course.Name,
-                        StartDate = course.StartDate,
-                        EndDate = course.EndDate
-                    });
-                await _context.SaveChangesAsync();
-
-                return StatusCode(200, "Successfully created course");
-                //return CreatedAtAction("GetCourse", new { id = _context.Courses.FirstOrDefault(u => u.CourseCode == course.CourseCode).Id }, course);
+                        course.Id = newId;
+                        return await CreateCourse(course);
+                    }
+                    else
+                    {
+                        newId = IdGenerator();
+                        course.Id = newId;
+                        return await CreateCourse(course);
+                    }
+                }
             }
             else
             {
-                return StatusCode(406, $"This {course.CourseCode} course is already exist");
+                return StatusCode(406, "Course already exist!");
             }
         }
         /// <summary>
@@ -148,6 +170,36 @@ namespace EduAPI.Controllers
         private bool CourseExists(int id)
         {
             return _context.Courses.Any(e => e.Id == id);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private int IdGenerator()
+        {
+            Random idGenerator = new Random();
+            return idGenerator.Next(0, int.MaxValue);
+        }
+
+        private async Task<ActionResult> CreateCourse(Course course)
+        {
+            try
+            {
+                _context.Courses.Add(new Course
+                {
+                    Id = course.Id,
+                    CourseCode = course.CourseCode,
+                    Name = course.Name,
+                    StartDate = course.StartDate,
+                    EndDate = course.EndDate,
+                });
+                await _context.SaveChangesAsync();
+                return StatusCode(200, "Successfully created course");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

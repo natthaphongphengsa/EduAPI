@@ -81,15 +81,33 @@ namespace EduAPI.Controllers
         // GET: api/CourseMemberships/5
         [HttpGet]
         [Route("GetCourseMembership/{id}")]
-        public async Task<ActionResult<CourseMembership>> GetCourseMembership(int id)
+        public async Task<ActionResult<CourseMembershipDto>> GetCourseMembership(int id)
         {
             var courseMembership = await _context.CourseMemberships.Include(c => c.Course).Include(u => u.User).FirstOrDefaultAsync(c => c.Id == id);
 
-            if (courseMembership == null)
+            if (courseMembership != null)
             {
-                return NotFound();
+                CourseMembershipDto courseMembershipDto = new CourseMembershipDto
+                {
+                    User = new UserDto
+                    {
+                        FirstName = courseMembership.User.FirstName,
+                        LastName = courseMembership.User.LastName,
+                        Email = courseMembership.User.Email,
+                    },
+                    Course = new CourseDto
+                    {
+                        CourseCode = courseMembership.Course.CourseCode,
+                        Name = courseMembership.Course.Name,
+                        StartDate = courseMembership.Course.StartDate,
+                        EndDate = courseMembership.Course.EndDate
+                    },
+                    EndrolledDate = courseMembership.EndrolledDate
+
+                };
+                return courseMembershipDto;
             }
-            return courseMembership;
+            return NotFound();
         }
         /// <summary>
         /// Update CourseMembership by find the Id.

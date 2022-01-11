@@ -27,9 +27,21 @@ namespace EduAPI.Controllers
         // GET: api/Users
         [HttpGet]
         [Route("GetUsers")]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            var users = await _context.Users.ToListAsync();
+
+            HashSet<UserDto> userDtos = new HashSet<UserDto>();
+            foreach (var user in users)
+            {
+                userDtos.Add(new UserDto
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                });
+            }
+            return userDtos;
         }
         /// <summary>
         /// Find user by Id 
@@ -96,24 +108,32 @@ namespace EduAPI.Controllers
         [Route("CreateUser")]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-            if (!_context.Users.Any(u => (u.FirstName == user.FirstName && u.LastName == user.LastName) || (u.Email == user.Email)))
+            if (!_context.Users.Any(u => (u.FirstName == user.FirstName && u.LastName == user.LastName) || (u.Email == user.Email || u.Id == user.Id)))
             {
-                try
+                int newId = IdGenerator();
+                if (user.Id > 0)
                 {
-                    _context.Users.Add(new User { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email });
-                    await _context.SaveChangesAsync();
-                    return StatusCode(200, "Successfully created user");
+                    return await CreateUser(user);
                 }
-                catch (Exception e)
+                else
                 {
-                    return BadRequest(e.Message);
+                    if (!await _context.Users.AnyAsync(u => u.Id == newId))
+                    {
+                        user.Id = newId;
+                        return await CreateUser(user);
+                    }
+                    else
+                    {
+                        newId = IdGenerator();
+                        user.Id = newId;
+                        return await CreateUser(user);
+                    }
                 }
             }
             else
             {
                 return StatusCode(406, "User already exist!");
             }
-
         }
         /// <summary>
         /// find User by id and delete user if exist 
@@ -148,6 +168,24 @@ namespace EduAPI.Controllers
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.Id == id);
+        }
+        private int IdGenerator()
+        {
+            Random idGenerator = new Random();
+            return idGenerator.Next(0, int.MaxValue);
+        }
+        private async Task<ActionResult> CreateUser(User user)
+        {
+            try
+            {
+                _context.Users.Add(new User { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email });
+                await _context.SaveChangesAsync();
+                return StatusCode(200, "Successfully created user");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

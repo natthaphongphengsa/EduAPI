@@ -91,6 +91,12 @@
             <param name="id">course Identity</param>
             <returns>Return true or false if course exist or not</returns>
         </member>
+        <member name="M:EduAPI.Controllers.CoursesController.IdGenerator">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:EduAPI.Controllers.UsersController.GetUsers">
             <summary>
             Get all user from database
