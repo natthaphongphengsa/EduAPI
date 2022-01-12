@@ -28,25 +28,25 @@ namespace EduAPI.Controllers
         // GET: api/Courses
         [HttpGet]
         [Route("GetCourses")]
-        public async Task<ActionResult<IEnumerable<CourseDto>>> GetCourses()
+        public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
         {
-            //List<CourseDto> courseDtos = new List<CourseDto>();
-            var courses = await _context.Courses.ToListAsync();
+            ////List<CourseDto> courseDtos = new List<CourseDto>();
+            //var courses = await _context.Courses.ToListAsync();
 
-            HashSet<CourseDto> courseDtos = new HashSet<CourseDto>();
+            //HashSet<CourseDto> courseDtos = new HashSet<CourseDto>();
 
-            foreach (var course in courses)
-            {
-                courseDtos.Add(new CourseDto
-                {
-                    CourseCode = course.CourseCode,
-                    Name = course.Name,
-                    StartDate = course.StartDate,
-                    EndDate = course.EndDate
-                });
-            }
+            //foreach (var course in courses)
+            //{
+            //    courseDtos.Add(new CourseDto
+            //    {
+            //        CourseCode = course.CourseCode,
+            //        Name = course.Name,
+            //        StartDate = course.StartDate,
+            //        EndDate = course.EndDate
+            //    });
+            //}
 
-            return courseDtos;
+            return await _context.Courses.ToListAsync();
         }
         /// <summary>
         /// Get course by id
@@ -56,16 +56,25 @@ namespace EduAPI.Controllers
         // GET: api/Courses/5
         [HttpGet]
         [Route("GetCourse/{id}")]
-        public async Task<ActionResult<Course>> GetCourse(int id)
+        public async Task<ActionResult<CourseDto>> GetCourse(int id)
         {
-            var course = await _context.Courses.FindAsync(id);
+            var course = await _context.Courses.FirstOrDefaultAsync(c => c.Id == id);
 
             if (course == null)
             {
                 return NotFound();
             }
+            else
+            {
+                return new CourseDto
+                {
+                    CourseCode = course.CourseCode,
+                    Name = course.Name,
+                    StartDate = course.StartDate,
+                    EndDate = course.EndDate
+                };
+            }
 
-            return course;
         }
         /// <summary>
         /// Update course by Id
@@ -114,7 +123,7 @@ namespace EduAPI.Controllers
         [Route("CreateCourse")]
         public async Task<ActionResult<Course>> PostCourse(Course course)
         {
-            if (!_context.Courses.Any(c => c.CourseCode == course.CourseCode || c.Name == course.Name || c.Id == course.Id))
+            if (!_context.Courses.Any(c => c.Id == course.Id))
             {
                 int newId = IdGenerator();
                 if (course.Id > 0)

@@ -27,21 +27,9 @@ namespace EduAPI.Controllers
         // GET: api/Users
         [HttpGet]
         [Route("GetUsers")]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            var users = await _context.Users.ToListAsync();
-
-            HashSet<UserDto> userDtos = new HashSet<UserDto>();
-            foreach (var user in users)
-            {
-                userDtos.Add(new UserDto
-                {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email,
-                });
-            }
-            return userDtos;
+            return await _context.Users.ToListAsync();
         }
         /// <summary>
         /// Find user by Id 
@@ -51,12 +39,13 @@ namespace EduAPI.Controllers
         // GET: api/Users/5
         [HttpGet]
         [Route("GetUser/{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<UserDto>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
+
             if (user != null)
             {
-                return user;
+                return new UserDto { FirstName = user.FirstName, LastName = user.LastName, Email = user.Email };
             }
             else
                 return NotFound();
@@ -108,7 +97,7 @@ namespace EduAPI.Controllers
         [Route("CreateUser")]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-            if (!_context.Users.Any(u => (u.FirstName == user.FirstName && u.LastName == user.LastName) || (u.Email == user.Email || u.Id == user.Id)))
+            if (!_context.Users.Any(u => u.Id == user.Id))
             {
                 int newId = IdGenerator();
                 if (user.Id > 0)
